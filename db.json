@@ -1,5 +1,56 @@
 {
-  "vendas": [],
+  "vendas": [
+    {
+      "id": "c2ce",
+      "data": "2025-07-22",
+      "hora": "21:00",
+      "descricao": "camisa gola polo",
+      "valor": 67,
+      "formaPagamento": "Débito",
+      "clienteFiado": "",
+      "timestamp": 1753228800000
+    },
+    {
+      "id": "cc4f",
+      "data": "2025-07-22",
+      "hora": "21:01",
+      "descricao": "cueca",
+      "valor": 45,
+      "formaPagamento": "Fiado",
+      "clienteFiado": "Joao pedro",
+      "timestamp": 1753228860000
+    },
+    {
+      "id": "dfce",
+      "data": "2025-07-10",
+      "hora": "21:02",
+      "descricao": "camisa gola polo",
+      "valor": 689,
+      "formaPagamento": "Crédito",
+      "clienteFiado": "",
+      "timestamp": 1752192120000
+    },
+    {
+      "id": "ca50",
+      "data": "2025-07-06",
+      "hora": "21:03",
+      "descricao": "bone",
+      "valor": 565,
+      "formaPagamento": "Pix",
+      "clienteFiado": "",
+      "timestamp": 1751846580000
+    },
+    {
+      "id": "b2e0",
+      "data": "2244-03-13",
+      "hora": "21:03",
+      "descricao": "camisa gola polo",
+      "valor": 45,
+      "formaPagamento": "Dinheiro",
+      "clienteFiado": "",
+      "timestamp": 8652873780000
+    }
+  ],
   "despesas": [],
   "saldo": {
     "valor": 0
