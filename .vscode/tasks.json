@@ -1,0 +1,23 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Iniciar JSON Server", // Nome da sua tarefa, você vai ver isso no menu
+            "type": "shell",
+            "command": "json-server --watch db.json --port 3000", // O comando completo para navegar e iniciar
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "isBackground": true, // Importante para o servidor rodar em segundo plano
+            "presentation": {
+                "reveal": "always",
+                "panel": "new" // Abre um novo terminal para o servidor
+            },
+            "runOptions": {
+                "runOn": "folderOpen" // Opcional: Tenta rodar automaticamente ao abrir a pasta. Teste isso.
+            }
+        }
+    ]
+}

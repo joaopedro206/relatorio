@@ -3,212 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Vendas e Finanças</title>
+    <title>Sistema de Gestão de Vendas e Despesas</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
 </head>
 <body>
     <header class="header">
         <div class="container">
-            <h1 class="logo">💰 Sistema de Vendas</h1>
+            <h1 class="logo">Meu Caixa</h1>
             <nav class="nav">
-                <button class="nav-btn active" data-tab="vendas">Registrar Venda</button>
-                <button class="nav-btn" data-tab="relatorios">Relatórios de Vendas</button>
-                <button class="nav-btn" data-tab="despesas">Minhas Despesas</button>
+                <button class="nav-btn active" data-tab="dashboard">Dashboard</button>
+                <button class="nav-btn" data-tab="vendas">Vendas</button>
+                <button class="nav-btn" data-tab="despesas">Despesas</button>
+                <button class="nav-btn" data-tab="relatorios">Relatórios</button>
             </nav>
         </div>
     </header>
 
-    <main class="main">
-        <section id="vendas" class="tab-content active">
-            <div class="container">
-                <h2 class="section-title">Registrar Nova Venda</h2>
-                
-                <div class="reports-grid">
-                    <div class="report-card primary-saldo">
-                        <h3>Seu Saldo Atual</h3>
-                        <div class="report-value" id="saldoAtualDisplay">R$ 0,00</div>
-                        <button class="btn-secondary btn-ajustar-saldo" id="btnAjustarSaldo">Ajustar Saldo Manualmente</button>
-                    </div>
-                </div>
-                <form id="vendaForm" class="form-card">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="dataVenda">Data da Venda</label>
-                            <input type="date" id="dataVenda" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="horaVenda">Hora da Venda</label>
-                            <input type="time" id="horaVenda" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="descricaoVenda">Descrição da Venda</label>
-                        <input type="text" id="descricaoVenda" placeholder="Ex: 3 pães, 1kg arroz, corte de cabelo" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="valorVenda">Valor Total (R$)</label>
-                        <input type="number" id="valorVenda" step="0.01" min="0" placeholder="0,00" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="formaPagamento">Forma de Pagamento</label>
-                        <select id="formaPagamento" required>
-                            <option value="">Selecione...</option>
-                            <option value="Dinheiro">Dinheiro</option>
-                            <option value="Débito">Débito</option>
-                            <option value="Crédito">Crédito</option>
-                            <option value="Pix">Pix</option> <option value="Fiado">Fiado</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group" id="clienteFiadoGroup" style="display: none;">
-                        <label for="clienteFiado">Nome do Cliente (Fiado)</label>
-                        <input type="text" id="clienteFiado" placeholder="Nome do cliente">
-                    </div>
-                    
-                    <button type="submit" class="btn-primary">Registrar Venda</button>
-                </form>
+    <main class="main container">
+        <div id="messageContainer" class="message-container"></div>
 
-                <div class="table-section">
-                    <h3>Últimas 10 Vendas</h3>
-                    <div class="table-container">
-                        <table id="tabelaVendas">
-                            <thead>
-                                <tr>
-                                    <th>Data e Hora</th>
-                                    <th>Descrição</th>
-                                    <th>Valor (R$)</th>
-                                    <th>Pagamento</th>
-                                    <th>Cliente (Fiado)</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
+        <section id="dashboard" class="tab-content active">
+            <h2 class="section-title">Dashboard Financeiro</h2>
+
+            <div class="reports-grid">
+                <div class="report-card primary-saldo">
+                    <h3>Saldo Total Atual</h3>
+                    <p class="report-value" id="displaySaldoTotal">R$ 0,00</p>
+                    <button class="btn-primary btn-ajustar-saldo" id="btnAjustarSaldo">Ajustar Saldo Manualmente</button>
+                </div>
+                <div class="report-card">
+                    <h3>Dinheiro em Mãos</h3>
+                    <p class="report-value" id="displaySaldoEmMaos">R$ 0,00</p>
+                </div>
+                <div class="report-card">
+                    <h3>Dinheiro em Contas (Banco/Outros)</h3>
+                    <p class="report-value" id="displaySaldoEmContas">R$ 0,00</p>
+                </div>
+                <div class="report-card">
+                    <h3>Total de Vendas (Período Atual)</h3>
+                    <p class="report-value" id="totalVendasDashboard">R$ 0,00</p>
+                </div>
+                <div class="report-card fiado-alert">
+                    <h3>Total Fiado (A Receber)</h3>
+                    <p class="report-value" id="totalFiadoDashboard">R$ 0,00</p>
+                </div>
+                 <div class="report-card">
+                    <h3>Total de Despesas (Período Atual)</h3>
+                    <p class="report-value" id="totalDespesasDashboard">R$ 0,00</p>
                 </div>
             </div>
         </section>
 
-        <section id="relatorios" class="tab-content">
-            <div class="container">
-                <h2 class="section-title">Relatórios de Vendas</h2>
-                
-                <div class="filters-card">
-                    <h3>Filtros de Data</h3>
+        <section id="vendas" class="tab-content">
+            <h2 class="section-title">Registro de Vendas</h2>
+            <div class="form-card">
+                <form id="vendaForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="dataInicio">Data de Início</label>
-                            <input type="date" id="dataInicio">
+                            <label for="dataVenda">Data:</label>
+                            <input type="date" id="dataVenda" required>
                         </div>
                         <div class="form-group">
-                            <label for="dataFim">Data de Fim</label>
-                            <input type="date" id="dataFim">
+                            <label for="horaVenda">Hora:</label>
+                            <input type="time" id="horaVenda" required>
                         </div>
-                        <button id="filtrarRelatorio" class="btn-secondary">Filtrar</button>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label for="descricaoVenda">Descrição da Venda:</label>
+                        <input type="text" id="descricaoVenda" placeholder="Ex: Venda de Camisas" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="valorVenda">Valor (R$):</label>
+                            <input type="number" id="valorVenda" step="0.01" min="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="formaPagamento">Forma de Pagamento:</label>
+                            <select id="formaPagamento" required>
+                                <option value="Dinheiro">Dinheiro</option>
+                                <option value="Débito">Cartão de Débito</option>
+                                <option value="Crédito">Cartão de Crédito</option>
+                                <option value="Pix">Pix</option>
+                                <option value="Fiado">Fiado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="clienteFiadoGroup" style="display: none;">
+                        <label for="clienteFiado">Cliente (Fiado):</label>
+                        <input type="text" id="clienteFiado" placeholder="Nome do Cliente">
+                    </div>
+                    <button type="submit" class="btn-primary">Registrar Venda</button>
+                </form>
+            </div>
 
-                <div class="reports-grid">
-                    <div class="report-card">
-                        <h3>Total de Vendas</h3>
-                        <div class="report-value" id="totalVendas">R$ 0,00</div>
-                    </div>
-                    
-                    <div class="report-card fiado-alert">
-                        <h3>Total Fiado Pendente</h3>
-                        <div class="report-value" id="totalFiado">R$ 0,00</div>
-                    </div>
-                </div>
-
-                <div class="charts-grid">
-                    <div class="chart-card">
-                        <h3>Vendas por Forma de Pagamento</h3>
-                        <canvas id="chartPagamento"></canvas>
-                    </div>
-                    
-                    <div class="chart-card">
-                        <h3>Vendas Diárias</h3>
-                        <canvas id="chartVendasDiarias"></canvas>
-                    </div>
+            <div class="table-section">
+                <h3>Últimas Vendas</h3>
+                <div class="table-container">
+                    <table id="tabelaVendas">
+                        <thead>
+                            <tr>
+                                <th>Data/Hora</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                                <th>Pagamento</th>
+                                <th>Cliente Fiado</th>
+                                <th>Afetou Saldo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
                 </div>
             </div>
         </section>
 
         <section id="despesas" class="tab-content">
-            <div class="container">
-                <h2 class="section-title">Minhas Despesas</h2>
-                
-                <form id="despesaForm" class="form-card">
+            <h2 class="section-title">Registro de Despesas e Gráficos</h2>
+            <div class="form-card">
+                <form id="despesaForm">
                     <div class="form-group">
-                        <label for="dataDespesa">Data da Despesa</label>
+                        <label for="dataDespesa">Data:</label>
                         <input type="date" id="dataDespesa" required>
                     </div>
-                    
                     <div class="form-group">
-                        <label for="descricaoDespesa">Descrição da Despesa</label>
-                        <input type="text" id="descricaoDespesa" placeholder="Ex: Conta de luz, Supermercado" required>
+                        <label for="descricaoDespesa">Descrição da Despesa:</label>
+                        <input type="text" id="descricaoDespesa" placeholder="Ex: Aluguel, Energia" required>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="valorDespesa">Valor da Despesa (R$)</label>
-                        <input type="number" id="valorDespesa" step="0.01" min="0" placeholder="0,00" required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="valorDespesa">Valor (R$):</label>
+                            <input type="number" id="valorDespesa" step="0.01" min="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="categoriaDespesa">Categoria:</label>
+                            <select id="categoriaDespesa" required>
+                                <option value="Aluguel">Aluguel</option>
+                                <option value="Contas de Consumo">Contas de Consumo</option>
+                                <option value="Salários">Salários</option>
+                                <option value="Fornecedores">Fornecedores</option>
+                                <option value="Transporte">Transporte</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="categoriaDespesa">Categoria da Despesa</label>
-                        <select id="categoriaDespesa" required>
-                            <option value="">Selecione...</option>
-                            <option value="Moradia">Moradia</option>
-                            <option value="Alimentação">Alimentação</option>
-                            <option value="Transporte">Transporte</option>
-                            <option value="Lazer">Lazer</option>
-                            <option value="Educação">Educação</option>
-                            <option value="Saúde">Saúde</option>
-                            <option value="Outros">Outros</option>
-                        </select>
-                    </div>
-                    
-                    <button type="submit" class="btn-primary">Registrar Despesa</button>
+                    <button type="submit" class="btn-secondary">Registrar Despesa</button>
                 </form>
+            </div>
 
-                <div class="table-section">
-                    <h3>Últimas Despesas</h3>
-                    <div class="table-container">
-                        <table id="tabelaDespesas">
-                            <thead>
-                                <tr>
-                                    <th>Data</th>
-                                    <th>Descrição</th>
-                                    <th>Valor (R$)</th>
-                                    <th>Categoria</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Despesas por Categoria</h3>
+                    <canvas id="chartDespesasCategoria"></canvas>
                 </div>
+                <div class="chart-card">
+                    <h3>Despesas Mensais</h3>
+                    <canvas id="chartDespesasMensal"></canvas>
+                </div>
+            </div>
 
-                <div class="charts-grid">
-                    <div class="chart-card">
-                        <h3>Despesas por Categoria</h3>
-                        <canvas id="chartDespesasCategoria"></canvas>
-                    </div>
-                    
-                    <div class="chart-card">
-                        <h3>Resumo Mensal</h3>
-                        <canvas id="chartDespesasMensal"></canvas>
-                    </div>
+            <div class="table-section">
+                <h3>Últimas Despesas</h3>
+                <div class="table-container">
+                    <table id="tabelaDespesas">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                                <th>Categoria</th>
+                                <th>Afetou Saldo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
                 </div>
+            </div>
+        </section>
+
+        <section id="relatorios" class="tab-content">
+            <h2 class="section-title">Relatórios e Gráficos de Vendas</h2>
+
+            <!-- Exemplo de filtro de datas nos relatórios -->
+            <div class="filters-card">
+                <label for="dataInicio">De:</label>
+                <input type="date" id="dataInicio">
+                <label for="dataFim">Até:</label>
+                <input type="date" id="dataFim">
+                <button id="btnEsteMes" class="btn-secondary">Este mês</button>
+                <button id="filtrarRelatorio" class="btn-primary">Filtrar</button>
+            </div>
+
+            <div class="reports-grid">
+                <div class="report-card">
+                    <h3>Vendas no Período</h3>
+                    <p class="report-value" id="totalVendas">R$ 0,00</p>
+                </div>
+                <div class="report-card fiado-alert">
+                    <h3>Total Fiado no Período</h3>
+                    <p class="report-value" id="totalFiado">R$ 0,00</p>
+                </div>
+                <div class="report-card">
+                    <h3>Despesas no Período</h3>
+                    <p class="report-value" id="totalDespesasRelatorio">R$ 0,00</p>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Vendas por Forma de Pagamento</h3>
+                    <canvas id="chartPagamento"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Vendas Diárias no Período</h3>
+                    <canvas id="chartVendasDiarias"></canvas>
+                </div>
+            </div>
+
+            <div class="lista-despesas-relatorio">
+                <h3>Despesas do Período</h3>
+                <table id="tabelaDespesasRelatorio">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th>Categoria</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Itens serão inseridos pelo JS -->
+                    </tbody>
+                </table>
             </div>
         </section>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="jav.js"></script>
 </body>
 </html>
